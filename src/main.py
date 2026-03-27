@@ -2,6 +2,9 @@ import tkinter
 import random
 import json
 
+with open("src/data.json",mode="r") as f:
+    t = json.load(f)
+
 root = tkinter.Tk()
 root.geometry("400x125")
 root.grid_columnconfigure(2,weight=1)
@@ -12,13 +15,8 @@ root.grid_columnconfigure(5,weight=1)
 root.grid_columnconfigure(6,weight=1)
 choices = ["Rock", "Paper", "Scissors"]
 
-t = {
-    "wins" : 0,
-    "loses" : 0
-}
-
-winss = 0
-losess = 0
+winss = int(t["wins"])
+losess = int(t["loses"])
 
 def change(b):
     global winss
@@ -29,6 +27,12 @@ def change(b):
     else:
         losess += 1
         t["loses"] = losess
+    with open("src/data.json", mode="w", encoding="utf-8")as f:
+        json.dump({
+            "wins" : winss,
+            "loses" : losess
+        },f)
+
 
 def pres(button):
     choice = random.choice(choices)
@@ -86,9 +90,9 @@ scissors.grid(column=5, row=2, sticky="n", columnspan=2)
 gam = tkinter.Label(root, text="You haven't played yet", font=("Arial",15,"bold"))
 gam.grid(column=3, row=3, sticky="n", columnspan=2)
 
-wins = tkinter.Label(root, text="Wins: 0", font=("Arial",15,"bold"))
+wins = tkinter.Label(root, text=f"Wins: {winss}", font=("Arial",15,"bold"))
 wins.grid(column=2, row=4, sticky="n", columnspan=2)
-loses = tkinter.Label(root, text="Loses: 0", font=("Arial",15,"bold"))
+loses = tkinter.Label(root, text=f"Loses: {losess}", font=("Arial",15,"bold"))
 loses.grid(column=4, row=4, sticky="n", columnspan=2)
 
 root.mainloop()
